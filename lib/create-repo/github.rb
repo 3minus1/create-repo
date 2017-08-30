@@ -2,8 +2,6 @@ require 'io/console'
 require 'pathname'
 module CreateRepo
   class Github
-    #attr_accessor :username, :password, :repo_name, :repo_desc, :isPrivate, :options, :repo, :client
-
     def initialize
       setup  
     end
@@ -44,7 +42,6 @@ module CreateRepo
       @options = {}
       @options['description'] = @repo_desc  if !@repo_desc.empty?
       @options['private'] = 'true' if @isPrivate
-      #todo: Check if repo already exists.. 
     end
 
     def create_repository
@@ -56,8 +53,6 @@ module CreateRepo
       puts `sudo git commit -m "Set up remote repository"`
       puts `sudo git push -u origin master`
       puts `echo "\033[0;32mAll set now!\033[0m"`
-
-#      puts "All set now"
     end
 
     def repository_exists?
@@ -66,8 +61,6 @@ module CreateRepo
       rescue
         false
     end
+
   end
-
- 
-
 end
