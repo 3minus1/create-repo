@@ -14,7 +14,6 @@ module CreateRepo
 
     def login
         puts "Logging in..."
-        puts @username
         @client = Octokit::Client.new \
           :login    => "#{@username}",
           :password => "#{@password}"
@@ -37,13 +36,15 @@ module CreateRepo
 
     def create_repository
       @repo = @client.create_repository(@repo_name,@options)
-      puts "Repository created!" if @repo
+      puts `echo -e "\033[0;32mRepository created!\033[0m"` if @repo
       puts `sudo git init`
       puts `sudo git remote add origin #{@repo[:html_url]}.git` 
       puts `sudo git add --all`
       puts `sudo git commit -m "Set up remote repository"`
       puts `sudo git push -u origin master`
-      puts "All set now"
+      puts `echo -e "\033[0;32mAll set now!\033[0m"`
+
+#      puts "All set now"
     end
 
   end
