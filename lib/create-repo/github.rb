@@ -16,28 +16,27 @@ module CreateRepo
     end
 
     def login
-
       puts "Logging in..."
-     
       begin
-
         @client = Octokit::Client.new \
           :login    => "#{@username}",
           :password => "#{@password}" ; nil
         user = @client.user
         user.login 
- 
       rescue
         puts `echo "\033[1;31mLogin failed! Try again\033[0m"`
         setup
         login
       end
-      
     end
 
     def get_repo_info
       puts "Repository Name: (default: #{cwd=Pathname.new(Dir.getwd).basename.to_s})"
       @repo_name = !(name=STDIN.gets.chomp).empty? ? name : cwd
+      if repository_exists?
+        puts `echo "\033[1;31mRepository already exists! Choose a different name\033[0m"`
+        get_repo_info
+      end
       puts "Description: (Press enter to skip)"
       @repo_desc = STDIN.gets.chomp
       puts "Is this a private repository? (y) or (n)"
@@ -61,5 +60,14 @@ module CreateRepo
 #      puts "All set now"
     end
 
+    def repository_exists?
+      repo = @client.repository(@username+"/"+@repo_name); nil
+      true
+      rescue
+        false
+    end
   end
+
+ 
+
 end
