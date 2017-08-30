@@ -7,14 +7,14 @@ module CreateRepo
     end
 
     def setup
-      puts "Github Username: "
+      print "Github Username: "
       @username = STDIN.gets.chomp
-      puts "Github Password: "
+      print "Github Password: "
       @password = STDIN.noecho(&:gets).chomp
     end
 
     def login
-      puts "Logging in..."
+      puts "\nLogging in..."
       begin
         @client = Octokit::Client.new \
           :login    => "#{@username}",
@@ -29,7 +29,7 @@ module CreateRepo
     end
 
     def get_repo_info
-      puts "Repository Name: (default: #{cwd=Pathname.new(Dir.getwd).basename.to_s})"
+      print "Repository Name (default: #{cwd=Pathname.new(Dir.getwd).basename.to_s}) : "
       @repo_name = !(name=STDIN.gets.chomp).empty? ? name : cwd
       if repository_exists?
         puts `echo "\033[1;31mRepository already exists! Choose a different name\033[0m"`
