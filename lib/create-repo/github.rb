@@ -5,20 +5,34 @@ module CreateRepo
     #attr_accessor :username, :password, :repo_name, :repo_desc, :isPrivate, :options, :repo, :client
 
     def initialize
+      setup  
+    end
+
+    def setup
       puts "Github Username: "
       @username = STDIN.gets.chomp
       puts "Github Password: "
       @password = STDIN.noecho(&:gets).chomp
-    
     end
 
     def login
-        puts "Logging in..."
+
+      puts "Logging in..."
+     
+      begin
+
         @client = Octokit::Client.new \
           :login    => "#{@username}",
-          :password => "#{@password}"
-      user = @client.user
-      user.login 
+          :password => "#{@password}" ; nil
+        user = @client.user
+        user.login 
+ 
+      rescue
+        puts `echo "\033[1;31mLogin failed! Try again\033[0m"`
+        setup
+        login
+      end
+      
     end
 
     def get_repo_info
@@ -36,13 +50,13 @@ module CreateRepo
 
     def create_repository
       @repo = @client.create_repository(@repo_name,@options)
-      puts `echo -e "\033[0;32mRepository created!\033[0m"` if @repo
+      puts `echo "\033[0;32mRepository created!\033[0m"` if @repo
       puts `sudo git init`
       puts `sudo git remote add origin #{@repo[:html_url]}.git` 
       puts `sudo git add --all`
       puts `sudo git commit -m "Set up remote repository"`
       puts `sudo git push -u origin master`
-      puts `echo -e "\033[0;32mAll set now!\033[0m"`
+      puts `echo "\033[0;32mAll set now!\033[0m"`
 
 #      puts "All set now"
     end
