@@ -1,0 +1,8 @@
+#! /usr/bin/env ruby
+require 'create-repo'
+require 'create-repo/github'
+require 'octokit'
+github = CreateRepo::Github.new()
+github.login
+github.get_repo_info
+github.create_repository
