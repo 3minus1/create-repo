@@ -1,4 +1,4 @@
-#create-repo
+# create-repo
 
 Create a repository straight from the terminal! 
 
